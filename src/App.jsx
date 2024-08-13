@@ -1,11 +1,12 @@
-import React from "react";
+import React from 'react';
+import Login from './login';
 
-const App = () => {
-  return(
-    <div>
-      <h1 className="text-3xl font-bold underline"> Hello world!</h1>
+function App() {
+  return (
+    <div className="App">
+      <Login />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
