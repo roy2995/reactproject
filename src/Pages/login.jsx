@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User, Lock } from 'lucide-react';
-import logo from './assets/logo.jpg';
+import logo from '../assets/logo.jpg';
 
 function Login() {
     const [username, setUsername] = useState('');
