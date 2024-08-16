@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Lock } from 'lucide-react';
 import logo from '../assets/logo.jpg';
 
@@ -7,6 +8,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,8 +22,8 @@ function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    User: username,
-                    Password: password,
+                    user: username,
+                    password: password,
                 }),
             });
 
@@ -32,19 +34,19 @@ function Login() {
                 console.log('Login exitoso:', data);
 
                 // Identificar el rol del usuario
-                const role = data.body.Role;
+                const role = data.Role;
 
-                // Redirigir dependiendo del rol
-                if (role === 'admin') {
-                    console.log({role});
-                    // window.location.href = '/admin-dashboard';
-                } else if (role === 'user') {
-                    console.log({role});
-                    // window.location.href = '/user-dashboard';
-                } else {
-                    console.log({role});
-                    // window.location.href = '/default-dashboard';
-                }
+                // Redirigir al dashboard, independientemente del rol
+                navigate('/dashboard');
+
+                // Si deseas manejarlo según roles específicos
+                // if (role === 'admin') {
+                //     navigate('/admin-dashboard');
+                // } else if (role === 'user') {
+                //     navigate('/user-dashboard');
+                // } else {
+                //     navigate('/default-dashboard');
+                // }
             } else {
                 setError(data.message || 'Credenciales incorrectas');
             }
@@ -56,7 +58,7 @@ function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-blue-600">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-700">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
                 <div className="flex justify-center mb-6">
                     <img src={logo} alt="Logo" className="w-24 h-24" />
