@@ -22,7 +22,7 @@ function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user: username,
+                    username: username,
                     password: password,
                 }),
             });
@@ -30,30 +30,31 @@ function Login() {
             const data = await response.json();
             setLoading(false);
 
-            if (response.ok && !data.error) {
-                console.log('Login exitoso:', data);
+            if (response.ok && data.accessToken) {
+                console.log('Login success:', data);
 
-                // Identificar el rol del usuario
-                const role = data.Role;
+                // Guardar el accessToken, refreshToken y el rol en localStorage
+                localStorage.setItem('token', data.accessToken);
+                localStorage.setItem('refreshToken', data.refreshToken);
+                localStorage.setItem('role', data.role);
 
-                // Redirigir al dashboard, independientemente del rol
-                navigate('/dashboard');
+                // Redirigir según el rol del usuario
+                const role = data.role;
 
-                // Si deseas manejarlo según roles específicos
-                // if (role === 'admin') {
-                //     navigate('/admin-dashboard');
-                // } else if (role === 'user') {
-                //     navigate('/user-dashboard');
-                // } else {
-                //     navigate('/default-dashboard');
-                // }
+                if (role === 'admin') {
+                    navigate('/dashboard');
+                } else if (role === 'user') {
+                    navigate('/homeUser');
+                } else {
+                    console.log('No tienes los permisos necesarios para acceder a esta área.');
+                }
             } else {
                 setError(data.message || 'Credenciales incorrectas');
             }
         } catch (error) {
             setLoading(false);
-            setError('Error en la conexión. Inténtalo de nuevo.');
-            console.error('Error en la conexión:', error);
+            setError('Error de conexión. Inténtalo de nuevo.');
+            console.error('Connection error:', error);
         }
     };
 
@@ -68,7 +69,7 @@ function Login() {
                         <User className="text-gray-700 mr-2" />
                         <input
                             type="text"
-                            placeholder="Enter your username"
+                            placeholder="Username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -79,7 +80,7 @@ function Login() {
                         <Lock className="text-gray-700 mr-2" />
                         <input
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -92,7 +93,7 @@ function Login() {
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                         disabled={loading}
                     >
-                        {loading ? 'Logging in...' : 'Login'}
+                        {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
                     </button>
                 </form>
             </div>
