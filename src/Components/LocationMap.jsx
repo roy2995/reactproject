@@ -1,26 +1,37 @@
-// src/Components/LocationMap.jsx
-import React from 'react';
-import Map, { Marker } from 'react-map-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
+import React, { useRef, useEffect } from 'react';
+import mapboxgl from 'mapbox-gl';
 
-const LocationMap = ({ position }) => {
-    return (
-        <div style={{ height: '400px', width: '400px', overflow: 'hidden', margin: '0 auto' }}>
-            <Map
-                initialViewState={{
-                    longitude: position.lon,
-                    latitude: position.lat,
-                    zoom: 17,
-                }}
-                style={{ width: '100%', height: '100%' }}
-                mapStyle="https://api.maptiler.com/maps/8f966beb-a74e-48ce-b7aa-b5bf56d4a1e9/style.json?key=qsCsJF20SfsXeSlLuOGk"
+// Configurar el token de Mapbox
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXN0cm9ib3lwdHkiLCJhIjoiY20wb2I0OHF3MDdvdDJscHNuN2FpcmdrMSJ9.CFQE8lSCfsDJfwTXC13Ohw';
 
-            >
-                {/* Marcar la ubicación del usuario */}
-                <Marker longitude={position.lon} latitude={position.lat} color="red" />
-            </Map>
-        </div>
-    );
+const LocationMap = ({ lat, lng }) => {
+  const mapContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (lat && lng && mapContainerRef.current) {
+      // Inicializar el mapa de Mapbox
+      const map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/mapbox/streets-v9', // Estilo del mapa
+        center: [lng, lat], // Centrar en la ubicación del usuario
+        zoom: 15,
+      });
+
+      // Colocar un marcador en la ubicación del usuario
+      new mapboxgl.Marker()
+        .setLngLat([lng, lat])
+        .addTo(map);
+
+      return () => map.remove(); // Limpiar el mapa al desmontar el componente
+    }
+  }, [lat, lng]);
+
+  return (
+    <div
+      ref={mapContainerRef}
+      style={{ width: '200px', height: '200px', borderRadius: '10px', border: '2px solid #000' }}
+    ></div>
+  );
 };
 
 export default LocationMap;
