@@ -51,87 +51,54 @@ const HomeUser = () => {
     getLocation();  // Obtener geolocalización
   }, []);
 
-  // Función para hacer el check-in
-  const handleCheckIn = async () => {
-    try {
-      const response = await fetch('http://localhost:4000/api/attendance', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          user_id: userId,  // Reemplaza con el ID real del usuario
-          check_in: new Date().toISOString(),
-          location,
-        }),
-      });
-      const data = await response.json();
-      setAttendance(data);  // Almacenar la asistencia en el estado
-      console.log('Check-in exitoso:', data);
-    } catch (error) {
-      console.error('Error al hacer el check-in:', error);
-    }
-  };
+    const checkIfWithinArea = (userLat, userLon) => {
+        const topLeft = { lat: 8.995831, lon: -79.524488};
+        const bottomRight = { lat: 8.993890, lon: -79.521902 };
 
-  // Función para hacer el check-out
-  const handleCheckOut = async () => {
-    try {
-      const response = await fetch(`http://localhost:4000/api/attendance/${attendance.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          check_out: new Date().toISOString(),
-        }),
-      });
-      const data = await response.json();
-      setCheckOutTime(data.check_out);
-      console.log('Check-out exitoso:', data);
-    } catch (error) {
-      console.error('Error al hacer el check-out:', error);
-    }
-  };
+        if (
+            userLat <= topLeft.lat && userLat >= bottomRight.lat &&
+            userLon >= topLeft.lon && userLon <= bottomRight.lon
+        ) {
+            setIsWithinArea(true);
+        } else {
+            setIsWithinArea(false);
+        }
+    };
 
-  return (
-    <div>
-      <Header role="user" />
-      <div className="text-center">
-        <h2 className="text-xl font-bold mb-2">Bienvenido, {userName}</h2>
-        <p>{dateTime}</p>
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-gray-300">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center" style={{ width: '100%', maxWidth: '1200px' }}>
+                {error && <p className="text-red-500">{error}</p>}
+                {position ? (
+                    <div>
+                        <h2 className="text-xl font-bold mb-4">Bienvenido</h2>
+                        <p>Tu ubicación actual es:</p>
+                        <p>Latitud: {position.lat}</p>
+                        <p>Longitud: {position.lon}</p>
+                       
+                    </div>
+                ) : (
+                    <p>Obteniendo tu ubicación...</p>
+                )}
 
-        {/* Verificar si ya tiene asistencia hoy y mostrar el mapa solo si no tiene */}
-        {!attendanceToday ? (
-          <>
-            {location.lat && location.lng ? (
-              <LocationMap lat={location.lat} lng={location.lng} />
-            ) : (
-              <p>Obteniendo geolocalización...</p>
-            )}
-
-            {/* Botón para hacer check-in */}
-            <button onClick={handleCheckIn} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">
-              Empezar Turno
-            </button>
-          </>
-        ) : (
-          <p>Ya has registrado tu asistencia hoy.</p>
-        )}
-
-        {/* Botón para hacer check-out */}
-        {attendance && (
-          <button onClick={handleCheckOut} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-            Salir del Turno
-          </button>
-        )}
-
-        {/* Mostrar información del check-out si existe */}
-        {checkOutTime && <p>Has terminado el turno a las: {checkOutTime}</p>}
-      </div>
-    </div>
-  );
+                {/* Here is the LocationMap */}
+                {position && (
+                    <div style={{ width: '100%', height: '400px' }}>
+                        <LocationMap position={position} />
+                    </div>
+                )}
+                 {isWithinArea ? (
+                            <button
+                                className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                            >
+                                Empezar Turno
+                            </button>
+                        ) : (
+                            <p className="text-red-500 mt-4">No estás dentro del área permitida para iniciar el turno.</p>
+                        )}
+            </div>
+        </div>
+    );
 };
 
 export default HomeUser;

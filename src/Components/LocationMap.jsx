@@ -1,37 +1,29 @@
-import React, { useRef, useEffect } from 'react';
-import mapboxgl from 'mapbox-gl';
+// src/Components/LocationMap.jsx
+import React from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
-// Configurar el token de Mapbox
-mapboxgl.accessToken = 'pk.eyJ1IjoiYXN0cm9ib3lwdHkiLCJhIjoiY20wb2I0OHF3MDdvdDJscHNuN2FpcmdrMSJ9.CFQE8lSCfsDJfwTXC13Ohw';
+const LocationMap = ({ position }) => {
+    return (
+        <div style={{ height: '400px', width: '80%', overflow: 'hidden', margin: '0 auto' }}>
+            <MapContainer
+                center={[position.lat, position.lon]} // Coordinates for the map center
+                zoom={17} // Zoom level
+                style={{ width: '100%', height: '100%' }}
+            >
+                {/* Use the correct URL format with the new access token */}
+                <TileLayer
+                    url="https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}?access_token=sk.eyJ1IjoiYXN0cm9ib3lwdHkiLCJhIjoiY20wcG9iZjhyMDM0ajJrcHNiODhrd2o5aSJ9.ebi2UZbY-odrbT1ZVIIcNA"
+                    attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>'
+                    tileSize={512}
+                    zoomOffset={-1}
+                />
 
-const LocationMap = ({ lat, lng }) => {
-  const mapContainerRef = useRef(null);
-
-  useEffect(() => {
-    if (lat && lng && mapContainerRef.current) {
-      // Inicializar el mapa de Mapbox
-      const map = new mapboxgl.Map({
-        container: mapContainerRef.current,
-        style: 'mapbox://styles/mapbox/streets-v9', // Estilo del mapa
-        center: [lng, lat], // Centrar en la ubicación del usuario
-        zoom: 15,
-      });
-
-      // Colocar un marcador en la ubicación del usuario
-      new mapboxgl.Marker()
-        .setLngLat([lng, lat])
-        .addTo(map);
-
-      return () => map.remove(); // Limpiar el mapa al desmontar el componente
-    }
-  }, [lat, lng]);
-
-  return (
-    <div
-      ref={mapContainerRef}
-      style={{ width: '200px', height: '200px', borderRadius: '10px', border: '2px solid #000' }}
-    ></div>
-  );
+                {/* Add a marker at the user's location */}
+                <Marker position={[position.lat, position.lon]} />
+            </MapContainer>
+        </div>
+    );
 };
 
 export default LocationMap;

@@ -1,15 +1,37 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Pages/login';
 import Dashboard from './Pages/Dashboard';
 import HomeUser from './Pages/HomeUser';
 
-// Definición del componente PrivateRoute
-function PrivateRoute({ children, allowedRoles }) {
-    const role = localStorage.getItem('role');
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  RadialLinearScale,
+  ArcElement,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
-    return allowedRoles.includes(role) ? children : <Navigate to="/login" />;
-}
+// Registrar los componentes de Chart.js
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  RadialLinearScale,
+  ArcElement,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function App() {
   return (
@@ -17,16 +39,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={
-          <PrivateRoute allowedRoles={['admin']}>
-            <Dashboard />
-          </PrivateRoute>
-        } />
-        <Route path="/homeUser" element={
-          <PrivateRoute allowedRoles={['user']}>
-            <HomeUser />
-          </PrivateRoute>
-        } />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/homeUser" element={<HomeUser />} />
       </Routes>
     </Router>
   );
