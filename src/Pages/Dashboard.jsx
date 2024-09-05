@@ -1,68 +1,34 @@
-// src/pages/Dashboard.jsx
 import React from 'react';
 import Header from '../Components/Header';
-import ChartContainer from '../Components/ChartContainer';
-import BarChartComponent from '../Components/BarChartComponent';
-import LineChartComponent from '../Components/LineChartComponent';
-import PieChartComponent from '../Components/PieChartComponent';
-import ListComponent from '../Components/ListComponent';
+import AreaChartComponent from '../Components/charts/AreaChartComponent';
+import BarChartComponent from '../Components/charts/BarChartComponent';
+import LineChartComponent from '../Components/charts/LineChartComponent';
+import DoughnutChartComponent from '../Components/charts/DoughnutChartComponent';
+import RadarChartComponent from '../Components/charts/RadarChartComponent';
+
 function Dashboard() {
-  const barChartData = [
-    { name: 'Mon', value: 2400 },
-    { name: 'Tue', value: 1398 },
-    { name: 'Wed', value: 9800 },
-    { name: 'Thu', value: 3908 },
-    { name: 'Fri', value: 4800 },
-    { name: 'Sat', value: 3800 },
-    { name: 'Sun', value: 4300 },
+  const randomData = () => Array.from({ length: 5 }, () => Math.floor(Math.random() * 1000));
+  
+  const chartData = [
+    { name: 'Jan', value: randomData()[0] },
+    { name: 'Feb', value: randomData()[1] },
+    { name: 'Mar', value: randomData()[2] },
+    { name: 'Apr', value: randomData()[3] },
+    { name: 'May', value: randomData()[4] }
   ];
 
-  const lineChartData = [
-    { name: 'Week 1', value: 4000 },
-    { name: 'Week 2', value: 3000 },
-    { name: 'Week 3', value: 2000 },
-    { name: 'Week 4', value: 2780 },
-  ];
-
-  const pieChartData = [
-    { name: 'Metros Cuadrados', value: 2400 },
-    { name: 'Buckets', value: 4567 },
-  ];
-
-  const COLORS = ['#0088FE', '#00C49F'];
-
-  const recentWeeklyReports = [
-    'Week 1 - Cleaned: 4000 sq ft',
-    'Week 2 - Cleaned: 3000 sq ft',
-    'Week 3 - Cleaned: 2000 sq ft',
-  ];
-
-  const recentMonthlyReports = [
-    'Month 1 - Cleaned: 10,000 sq ft',
-    'Month 2 - Cleaned: 12,000 sq ft',
-  ];
-
-  // Supongamos que el rol del usuario es 'admin', esto debería venir del estado global o de la autenticación
-  const userRole = 'admin'; 
+  const colors = ['rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 1)'];
+  const barColors = ['#FF6384', '#36A2EB', '#FFCE56'];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-300">
-      <Header role={userRole} />
-      <div className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <ChartContainer title="Bar Chart Example">
-            <BarChartComponent data={barChartData} />
-          </ChartContainer>
-          <ChartContainer title="Line Chart Example">
-            <LineChartComponent data={lineChartData} />
-          </ChartContainer>
-          <ChartContainer title="Pie Chart Example">
-            <PieChartComponent data={pieChartData} colors={COLORS} />
-          </ChartContainer>
-        </div>
-
-        <ListComponent title="Recent Weekly Reports" items={recentWeeklyReports} />
-        <ListComponent title="Recent Monthly Reports" items={recentMonthlyReports} />
+    <div className="min-h-screen bg-gray-100">
+      <Header />
+      <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <AreaChartComponent data={chartData} colors={colors} />
+        <BarChartComponent data={chartData} colors={barColors} />
+        <LineChartComponent data={chartData} colors={colors} />
+        <DoughnutChartComponent data={chartData} colors={barColors} />
+        <RadarChartComponent data={chartData} colors={colors} />
       </div>
     </div>
   );

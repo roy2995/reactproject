@@ -1,30 +1,55 @@
-// src/Pages/HomeUser.jsx
 import React, { useState, useEffect } from 'react';
-import LocationMap from '../Components/LocationMap';
+import Header from '../Components/Header';
+import LocationMap from '../Components/LocationMap';  // Importar el componente del mapa
 
 const HomeUser = () => {
-    const [position, setPosition] = useState(null);
-    const [error, setError] = useState(null);
-    const [isWithinArea, setIsWithinArea] = useState(false);
+  const [attendanceToday, setAttendanceToday] = useState(false);  // Para verificar si ya tiene asistencia hoy
+  const [attendance, setAttendance] = useState(null);
+  const [checkOutTime, setCheckOutTime] = useState(null);
+  const [location, setLocation] = useState({ lat: null, lng: null });
 
-    useEffect(() => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setPosition({
-                        lat: position.coords.latitude,
-                        lon: position.coords.longitude,
-                    });
-                    checkIfWithinArea(position.coords.latitude, position.coords.longitude);
-                },
-                (error) => {
-                    setError(error.message);
-                }
-            );
-        } else {
-            setError("Geolocation is not available");
+  const userName = 'Usuario';  // Cambia esto según los datos reales de tu aplicación
+  const userId = 1;  // ID real del usuario, debería obtenerse de la autenticación o estado global
+  const dateTime = new Date().toLocaleString();
+
+  // Función para verificar si el usuario ya tiene un registro de asistencia hoy
+  const checkAttendanceForToday = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/attendance/today/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      const data = await response.json();
+      setAttendanceToday(data.attendanceExists);
+    } catch (error) {
+      console.error('Error al verificar la asistencia de hoy:', error);
+    }
+  };
+
+  // Función para obtener la ubicación del usuario
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error('Error obteniendo la geolocalización:', error);
         }
-    }, []);
+      );
+    } else {
+      console.error('Geolocalización no es soportada por este navegador.');
+    }
+  };
+
+  // Efecto para obtener la ubicación y verificar asistencia al cargar el componente
+  useEffect(() => {
+    checkAttendanceForToday();  // Verificar si ya tiene asistencia hoy
+    getLocation();  // Obtener geolocalización
+  }, []);
 
     const checkIfWithinArea = (userLat, userLon) => {
         const topLeft = { lat: 8.995831, lon: -79.524488};

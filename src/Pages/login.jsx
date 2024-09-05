@@ -36,10 +36,10 @@ function Login() {
                 // Guardar el accessToken, refreshToken y el rol en localStorage
                 localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('role', data.role);
+                localStorage.setItem('role', data.user.role);  // Aquí es importante obtener el rol del usuario
 
                 // Redirigir según el rol del usuario
-                const role = data.role;
+                const role = data.user.role;  // Ahora obtenemos el rol correctamente
 
                 if (role === 'admin') {
                     navigate('/dashboard');
