@@ -26,10 +26,9 @@ const HomeUser = () => {
         }
     }, []);
 
-    // Función para verificar si el usuario está dentro del área delimitada
     const checkIfWithinArea = (userLat, userLon) => {
-        const topLeft = { lat: 8.9932622865547, lon: -79.50311281429472};
-        const bottomRight = { lat: 8.992453992126656, lon: -79.50189865982689 };
+        const topLeft = { lat: 8.995831, lon: -79.524488};
+        const bottomRight = { lat: 8.993890, lon: -79.521902 };
 
         if (
             userLat <= topLeft.lat && userLat >= bottomRight.lat &&
@@ -43,7 +42,7 @@ const HomeUser = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-gray-300">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg text-center" style={{ width: '100%', maxWidth: '1200px' }}>
                 {error && <p className="text-red-500">{error}</p>}
                 {position ? (
                     <div>
@@ -51,7 +50,19 @@ const HomeUser = () => {
                         <p>Tu ubicación actual es:</p>
                         <p>Latitud: {position.lat}</p>
                         <p>Longitud: {position.lon}</p>
-                        {isWithinArea ? (
+                       
+                    </div>
+                ) : (
+                    <p>Obteniendo tu ubicación...</p>
+                )}
+
+                {/* Here is the LocationMap */}
+                {position && (
+                    <div style={{ width: '100%', height: '400px' }}>
+                        <LocationMap position={position} />
+                    </div>
+                )}
+                 {isWithinArea ? (
                             <button
                                 className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                             >
@@ -60,16 +71,6 @@ const HomeUser = () => {
                         ) : (
                             <p className="text-red-500 mt-4">No estás dentro del área permitida para iniciar el turno.</p>
                         )}
-                    </div>
-                ) : (
-                    <p>Obteniendo tu ubicación...</p>
-                )}
-                {/* Aquí se muestra el componente LocationMap justo debajo del texto de bienvenida */}
-                {position && (
-                    <div className="mt-4">
-                        <LocationMap position={position} />
-                    </div>
-                )}
             </div>
         </div>
     );
