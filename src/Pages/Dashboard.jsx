@@ -47,7 +47,7 @@ const Dashboard = () => {
         <GaugeChartComponent value={90} title="Nivel de cumplimiento en Terminal 2" />
       </div>
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
         <ListComponent title="Recent Daily Reports" items={['2023-05-01', '2023-04-30', '2023-04-29']} />
         <ListComponent title="Recent Weekly Reports" items={['Week of 2023-04-24', 'Week of 2023-04-17', 'Week of 2023-04-10']} />
         <ListComponent title="Recent Monthly Reports" items={['April 2023', 'March 2023']} />
