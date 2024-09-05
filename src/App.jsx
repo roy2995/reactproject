@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Pages/login';
 import Dashboard from './Pages/Dashboard';
 import HomeUser from './Pages/HomeUser';
+import CleaningService from './Pages/CleaningService';
 
 import {
   Chart as ChartJS,
@@ -40,6 +41,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/homeUser" element={<HomeUser />} />
+        <Route path="/CleaningService" element={<CleaningService />} />
       </Routes>
     </Router>
   );
