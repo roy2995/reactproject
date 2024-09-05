@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "chart.js": "^4.4.4",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.427.0",
     "mapbox-gl": "^3.6.0",
     "mapbox-gl-leaflet": "github:mapbox/mapbox-gl-leaflet",
