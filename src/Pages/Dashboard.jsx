@@ -31,6 +31,13 @@ const Dashboard = () => {
     { name: "Quincenal", value: 15 },
     { name: "Mensual", value: 15 },
   ];
+  
+  const mixedChartData = {
+    labels: ['Enero', 'Febrero', 'Marzo'],
+    barData: [20, 30, 40],
+    lineData: [50, 60, 70],
+  };
+  
 
   const colors = ['rgba(75, 192, 192, 0.2)', 'rgba(75, 192, 192, 1)'];
   const barColors = ['#FF6384', '#36A2EB', '#FFCE56'];
@@ -44,13 +51,13 @@ const Dashboard = () => {
         <LineChartComponent data={frequencyData} colors={colors} />
         <DoughnutChartComponent data={frequencyData} colors={barColors} />
         <GaugeChartComponent value={85} title="Nivel de cumplimiento en Terminal 1" />
-        <GaugeChartComponent value={90} title="Nivel de cumplimiento en Terminal 2" />
+        <GaugeChartComponent value={85} title="Nivel de cumplimiento en Terminal 2" />
       </div>
 
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-        <ListComponent title="Recent Daily Reports" items={['2023-05-01', '2023-04-30', '2023-04-29']} />
-        <ListComponent title="Recent Weekly Reports" items={['Week of 2023-04-24', 'Week of 2023-04-17', 'Week of 2023-04-10']} />
-        <ListComponent title="Recent Monthly Reports" items={['April 2023', 'March 2023']} />
+        <ListComponent title="Reportes Diarios" items={['2024-09-06', '2023-09-02', '2023-09-01']} />
+        <ListComponent title="Reportes Semanles" items={['semana 2023-08-24', 'semana 2023-08-17', 'semana 2023-08-10']} />
+        <ListComponent title="Reportes Mensuales" items={['Abril 2024', 'agosto 2024']} />
       </div>
     </div>
   );
