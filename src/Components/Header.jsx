@@ -8,24 +8,18 @@ const Header = ({ role }) => {
       case 'admin':
         return (
           <>
-            <li><Link to="/personnel" className="hover:text-blue-500">Personnel</Link></li>
-            <li><Link to="/tasks" className="hover:text-blue-500">Tasks</Link></li>
-            <li><Link to="/dashboard" className="hover:text-blue-500">Dashboard</Link></li>
-          </>
-        );
-      case 'entreprise':
-        return (
-          <>
-            <li><Link to="/reports" className="hover:text-blue-500">Reports</Link></li>
-            <li><Link to="/dashboard" className="hover:text-blue-500">Dashboard</Link></li>
+            <li><Link to="/personnel" className="hover:text-blue-500">Personal</Link></li>
+            <li><Link to="/tasks" className="hover:text-blue-500">Reportes</Link></li>
+            <li><Link to="/dashboard" className="hover:text-blue-500">Panel de control</Link></li>
           </>
         );
       case 'user':
         return (
           <>
-            <li><Link to="/home" className="hover:text-blue-500">Home</Link></li>
-            <li><Link to="/create-report" className="hover:text-blue-500">Create Report</Link></li>
-            <li><Link to="/view-group" className="hover:text-blue-500">View Group</Link></li>
+            <li><Link to="/homeUser" className="hover:text-blue-500">Inicio</Link></li>
+            <li><Link to="/cleaningService" className="hover:text-blue-500">Crear Reporte</Link></li>
+            <li><Link to="/view-group" className="hover:text-blue-500">Ver Groupo</Link></li>
+            <li><Link to="/create-report" className="hover:text-blue-500">salir</Link></li> {/* Pestaña agregada */}
           </>
         );
       default:

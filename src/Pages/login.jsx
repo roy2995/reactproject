@@ -31,20 +31,20 @@ function Login() {
             setLoading(false);
 
             if (response.ok && data.accessToken) {
-                console.log('Login success:', data);
-
                 // Guardar el accessToken, refreshToken y el rol en localStorage
                 localStorage.setItem('token', data.accessToken);
                 localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('role', data.user.role);  // Aquí es importante obtener el rol del usuario
+                localStorage.setItem('role', data.user.role);
 
                 // Redirigir según el rol del usuario
-                const role = data.user.role;  // Ahora obtenemos el rol correctamente
+                const role = data.user.role;
 
                 if (role === 'admin') {
                     navigate('/dashboard');
                 } else if (role === 'user') {
                     navigate('/homeUser');
+                } else if (role === 'entreprise') {
+                    navigate('/reports');
                 } else {
                     console.log('No tienes los permisos necesarios para acceder a esta área.');
                 }
