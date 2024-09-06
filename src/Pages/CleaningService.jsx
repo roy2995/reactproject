@@ -14,18 +14,18 @@ const CleaningService = () => {
 
     const contingencyOptions = {
         lobby: ["Baldosas rotas", "Goteras", "Vidrios rotos"],
-        cocina: ["Tubería rota", "Problemas eléctricos", "Goteras"],
-        baños: ["Inodoros dañados", "Fugas de agua", "Problemas de desagüe"],
-        oficinas: ["Problemas eléctricos", "Fugas de agua", "Vidrios rotos"],
-        terminal1_areas_publicas: ["Baldosas rotas", "Vidrios rotos", "Problemas eléctricos"],
-        estacionamientos: ["Tubería rota", "Daños en rampas", "Problemas eléctricos"],
-        plataforma: ["Daños en rampas", "Problemas eléctricos", "Goteras"],
+        cocina: ["Tubería rota", "Problemas eléctricos", "Goteras", "Linea blanca dañada"],
+        baños: ["Inodoros dañados", "Fugas de agua", "Problemas de desagüe", "Espejos rotos", "Baldosas rotas", "Puertas dañadas", "Accesorios dañados"],
+        oficinas: ["Problemas eléctricos", "Fugas de agua", "Vidrios rotos", "Sillas dañadas", "Equipos informáticos dañados", "Muebles con daños", "Baldosas rotas"],
+        terminal1_areas_publicas: ["Baldosas rotas", "Vidrios rotos", "Problemas eléctricos", "Accesorios rotos", "Botes de basura dañados", "Luces defectuosas", "Máquinas expendedoras dañadas", "Equipo electrónico con daños"],
+        estacionamientos: ["Tubería rota", "Daños en rampas", "Problemas eléctricos", "Fugas de gas", "Carros abandonados", "Carros mal parqueados", "Huecos en el pavimento", "Señalizaciones dañadas"],
+        plataforma: ["Daños en rampas", "Problemas eléctricos", "Goteras", "Basura en la pista", "Equipo metálico en la pista", "Equipos de atención al avión fuera de área", "Señalizaciones dañadas"],
     };
 
     const [tasks, setTasks] = useState([]);
-    const [beforePhoto, setbeforePhoto] = useState(null);
+    const [beforePhoto, setBeforePhoto] = useState(null);
     const [afterPhoto, setAfterPhoto] = useState(null);
-    const [contingency, setContingency] = useState("");
+    const [contingencies, setContingencies] = useState([]);
     const [assignedArea, setAssignedArea] = useState("");
 
     const completedTasks = tasks.filter((task) => task.completed).length;
@@ -34,7 +34,7 @@ const CleaningService = () => {
     const handleFileChange = (e, type) => {
         const file = e.target.files[0];
         if (type === "before") {
-            setbeforePhoto(URL.createObjectURL(file));
+            setBeforePhoto(URL.createObjectURL(file));
         } else {
             setAfterPhoto(URL.createObjectURL(file));
         }
@@ -42,7 +42,7 @@ const CleaningService = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Formulario enviado", tasks, beforePhoto, afterPhoto, contingency, assignedArea);
+        console.log("Formulario enviado", tasks, beforePhoto, afterPhoto, contingencies, assignedArea);
     };
 
     const handleTaskChange = (index) => {
@@ -51,19 +51,27 @@ const CleaningService = () => {
         setTasks(newTasks);
     };
 
+    const handleContingencyChange = (index) => {
+        const newContingencies = [...contingencies];
+        newContingencies[index].completed = !newContingencies[index].completed;
+        setContingencies(newContingencies);
+    };
+
     const handleAreaChange = (e) => {
         const selectedArea = e.target.value;
         setAssignedArea(selectedArea);
 
-        // Cambiar las tareas según el área asignada
         const newTasks = (taskOptions[selectedArea] || []).map((task) => ({
             name: task,
             completed: false,
         }));
         setTasks(newTasks);
 
-        // Cambiar las contingencias según el área asignada
-        setContingency("");
+        const newContingencies = (contingencyOptions[selectedArea] || []).map((contingency) => ({
+            name: contingency,
+            completed: false,
+        }));
+        setContingencies(newContingencies);
     };
 
     return (
@@ -134,21 +142,20 @@ const CleaningService = () => {
                     ))}
                 </div>
 
-                {/* Contingencia */}
+                {/* Lista de contingencias */}
                 <div>
-                    <label className="block text-lg font-semibold text-gray-700 mb-2">Contingencia</label>
-                    <select
-                        value={contingency}
-                        onChange={(e) => setContingency(e.target.value)}
-                        className="w-full border-2 border-gray-300 px-4 py-3 rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="">Seleccione la contingencia</option>
-                        {(contingencyOptions[assignedArea] || []).map((contingencyItem, index) => (
-                            <option key={index} value={contingencyItem}>
-                                {contingencyItem}
-                            </option>
-                        ))}
-                    </select>
+                    <label className="block text-lg font-semibold text-gray-700 mb-2">Lista de Contingencias</label>
+                    {contingencies.map((contingency, index) => (
+                        <div key={index} className="flex items-center mb-2">
+                            <input
+                                type="checkbox"
+                                checked={contingency.completed}
+                                onChange={() => handleContingencyChange(index)}
+                                className="mr-3 h-5 w-5 text-blue-500 focus:ring-2 focus:ring-blue-500 border-2 border-gray-300 rounded-full"
+                            />
+                            <label className="text-gray-700 text-lg">{contingency.name}</label>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Barra de progreso */}
