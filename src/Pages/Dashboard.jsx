@@ -37,7 +37,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <Header />
+      <Header role="admin"/>
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <AreaChartComponent data={areaData} colors={colors} />
         <BarChartComponent data={taskData} colors={barColors} />

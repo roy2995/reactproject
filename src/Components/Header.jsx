@@ -18,8 +18,8 @@ const Header = ({ role }) => {
           <>
             <li><Link to="/homeUser" className="hover:text-blue-500">Inicio</Link></li>
             <li><Link to="/cleaningService" className="hover:text-blue-500">Crear Reporte</Link></li>
-            <li><Link to="/view-group" className="hover:text-blue-500">Ver Groupo</Link></li>
-            <li><Link to="/create-report" className="hover:text-blue-500">salir</Link></li> {/* Pestaña agregada */}
+            <li><Link to="/view-group" className="hover:text-blue-500">Ver Grupo</Link></li>
+            <li><Link to="/create-report" className="hover:text-blue-500">Salir</Link></li> {/* Pestaña agregada */}
           </>
         );
       default:

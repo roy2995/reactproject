@@ -36,18 +36,11 @@ ChartJS.register(
 );
 
 function App() {
-  const role = localStorage.getItem('role');
-
   return (
     <Router>
-      {/* Mostrar el Header fuera del Routes */}
-      {window.location.pathname !== '/login' && role && <Header role={role} />}
-
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        
-        {/* Rutas privadas */}
         <Route path="/dashboard" element={
           <PrivateRoute allowedRoles={['admin']}>
             <Dashboard />
@@ -58,14 +51,14 @@ function App() {
             <HomeUser />
           </PrivateRoute>
         } />
+        {/* Añadimos la ruta para CleaningService */}
         <Route path="/cleaningService" element={
           <PrivateRoute allowedRoles={['user']}>
-            <CleaningService />  {/* Ruta para Cleaning Service */}
+            <CleaningService />
           </PrivateRoute>
         } />
       </Routes>
     </Router>
   );
 }
-
 export default App;
